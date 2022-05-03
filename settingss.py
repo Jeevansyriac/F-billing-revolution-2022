@@ -331,4 +331,76 @@ lbx.place(x=248,y=90)
 
 
 
+
+#--------tab4-------------#
+firsttab1=Frame(tab04, relief=GROOVE, bg="#f8f8f2")
+firsttab1.pack(side="top", fill=BOTH)
+
+firsttab=Frame(firsttab1, bg="#f5f3f2", height=700)
+firsttab.pack(side="top", fill=BOTH)
+
+ver = Label(firsttab,text="Order# prefix")
+ver.place(x=5,y=40)
+
+lbx = Listbox(firsttab1, height=1)
+lbx.insert(END, "ORD")
+lbx.place(x=100,y=40)
+
+ver = Label(firsttab,text="Starting Invoice number")
+ver.place(x=25,y=80)
+
+spin1 = Spinbox(firsttab,from_=1,to=1000000,width=15)
+spin1.place(x=50,y=100)
+
+ver = Label(firsttab,text="Header box background color")
+ver.place(x=5,y=140)
+
+
+win_menu = StringVar()
+winstyle = ttk.Combobox(firsttab,textvariable=win_menu)
+winstyle.place(x=6 ,y=160)
+winstyle['values'] = ('Default','Black','Maroon','Green','Olive','Navy','Purple','Teal','Gray','Silver','Red','Lime','Yellow','Blue','Fuchsia','Aqua','White','ScrollBar','Background','ActiveCaption','InactiveCaption','Menu','Window','WindowFrame','MenuText','WindowText','CaptionText','ActiveBorder','InactiveBorder','AppWorkSpace','Highlight','HighlightText','BtnFace','InactiveCaptionText','BtnHighlight','3DDkShadow','3DLight','InfoText','InfoBk','Custom')
+winstyle.current(0)
+
+ver = Label(firsttab,text="Customize Invoice text labels")
+ver.place(x=5,y=190)
+
+lbx = Listbox(firsttab1, height=8, width=25)
+lbx.insert(END, "Order")
+lbx.insert(END, "Order#")
+lbx.insert(END, "Order date")
+lbx.insert(END, "Due date")
+lbx.insert(END, "Order To")
+lbx.insert(END, "Order total")
+
+
+
+
+lbx.place(x=5,y=220)
+
+ver = Label(firsttab,text="Default Invoice template(example,click on preview for mouse scrolling)")
+ver.place(x=248,y=55 )
+
+ver = Label(firsttab,text="Default Invoice template")
+ver.place(x=619,y=40)
+
+win_menu = StringVar()
+winstyle = ttk.Combobox(firsttab,textvariable=win_menu)
+winstyle.place(x=770 ,y=40, width=220)
+winstyle['values'] = ('Professional 1 (logo on left side)','Professional 2 (logo on right side)','Simplified 1 (logo on left side)','Simplified 2 (logo on right side)','Business Classic')
+winstyle.current(0)
+
+messagelbframe=LabelFrame(firsttab,text="Predefined terms and conditions text for estimates", height=100, width=980)
+messagelbframe.place(x=248, y=400)
+
+txt = scrolledtext.ScrolledText(firsttab, undo=True,width=115,height=4)
+txt.place(x=260,y=425)
+
+bttermadd = Button(firsttab,text="Restore defaults")
+bttermadd.place(x=32,y=450)
+
+lbx = Listbox(firsttab1, height=18, width=162, bg="grey")
+lbx.place(x=248,y=90)
+
+
 root.mainloop()
