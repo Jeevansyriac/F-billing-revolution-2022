@@ -326,8 +326,43 @@ txt.place(x=260,y=425)
 bttermadd = Button(firsttab,text="Restore defaults")
 bttermadd.place(x=32,y=450)
 
+frame = Frame(
+    firsttab,
+    width=953,
+    height=300
+    )
+frame.pack(expand=True, fill=BOTH)
+frame.place(x=247,y=90)
+canvas=Canvas(
+    frame,
+    bg='grey',
+    width=953,
+    height=300,
+    scrollregion=(0,0,700,700)
+    )
+
+vertibar=Scrollbar(
+    frame,
+    orient=VERTICAL
+    )
+vertibar.pack(side=RIGHT,fill=Y)
+vertibar.config(command=canvas.yview)
+canvas.config(width=953,height=300)
+
+canvas.config(
+    yscrollcommand=vertibar.set
+    )
+canvas.pack(expand=True,side=LEFT,fill=BOTH)
+# paperheigth = firsttab.winfo_fpixels('1m') * 297
+# paperwidth = firsttab.winfo_fpixels('1m') * 210
+canvas.create_rectangle(100,20,850,675, outline='yellow',fill='white')
+canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
+
+canvas.create_text(285, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
+
+
 lbx = Listbox(firsttab1, height=18, width=162, bg="grey")
-lbx.place(x=248,y=90)
+# lbx.place(x=248,y=90)
 
 
 
@@ -398,9 +433,43 @@ txt.place(x=260,y=425)
 
 bttermadd = Button(firsttab,text="Restore defaults")
 bttermadd.place(x=32,y=450)
+frame = Frame(
+    firsttab,
+    width=953,
+    height=300
+    )
+frame.pack(expand=True, fill=BOTH)
+frame.place(x=247,y=90)
+canvas=Canvas(
+    frame,
+    bg='grey',
+    width=953,
+    height=300,
+    scrollregion=(0,0,700,700)
+    )
+
+vertibar=Scrollbar(
+    frame,
+    orient=VERTICAL
+    )
+vertibar.pack(side=RIGHT,fill=Y)
+vertibar.config(command=canvas.yview)
+canvas.config(width=953,height=300)
+
+canvas.config(
+    yscrollcommand=vertibar.set
+    )
+canvas.pack(expand=True,side=LEFT,fill=BOTH)
+# paperheigth = firsttab.winfo_fpixels('1m') * 297
+# paperwidth = firsttab.winfo_fpixels('1m') * 210
+canvas.create_rectangle(100,20,850,675, outline='yellow',fill='white')
+canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
+
+canvas.create_text(285, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
+
 
 lbx = Listbox(firsttab1, height=18, width=162, bg="grey")
-lbx.place(x=248,y=90)
+# lbx.place(x=248,y=90)
 
 
 root.mainloop()
