@@ -1,6 +1,6 @@
-from ast import pattern
+#from ast import pattern
 from calendar import c
-from cgitb import enable, text
+from cgitb import enable, reset, text
 from distutils import command
 from itertools import count
 from pydoc import describe
@@ -9,6 +9,7 @@ from sqlite3 import enable_callback_tracebacks
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+from tkinter import font
 from tkinter.font import BOLD
 from urllib.parse import parse_qs
 from PIL import ImageTk, Image, ImageFile
@@ -33,17 +34,17 @@ from openpyxl import load_workbook
 import shutil
 import csv
 import json
+from tkPDFViewer import tkPDFViewer as pdf
+from tkinter import Tk, Canvas
 
-#sql connection
+
 fbilldb = mysql.connector.connect(
-    host="localhost", user="root", password="", database="fbill", port="3306"
+    host="localhost", user="root", password="", database="fbillingsintgrtd", port="3306"
 )
 fbcursor = fbilldb.cursor()
-#------------#
-
 
 root=Tk()
-root.geometry("1360x730")
+root.geometry("1300x730")
 root.resizable(False, False)
 root.title("F-Billing Revolution 2022(FREE version) | Company database:fbillingdb | User:Administrator")
 p1 = PhotoImage(file = 'images/fbicon.png')
@@ -77,6 +78,7 @@ mark2 = PhotoImage(file="images/mark2.png")
 photo10 = PhotoImage(file = "images/text-message.png")
 addnew = PhotoImage(file="images/plus.png")
 delete = PhotoImage(file="images/delete_E.png")
+
 tabControl = ttk.Notebook(root)
 tab1 = ttk.Frame(tabControl)
 tab2 = ttk.Frame(tabControl)
@@ -239,180 +241,147 @@ tabControl.add(tab010,image=setting,compound = LEFT, text ='Purchase Order')
 tabControl.pack(expand = 1, fill ="both")
 
 
-
-
-#--------tab3-------------#
+################### tab03 ###################################
 thirdtab1=Frame(tab03, relief=GROOVE, bg="#f8f8f2")
 thirdtab1.pack(side="top", fill=BOTH)
 
 thirdtab=Frame(thirdtab1, bg="#f5f3f2", height=700)
 thirdtab.pack(side="top", fill=BOTH)
-
-ver = Label(thirdtab,text="Invoice# prefix")
+ver = Label(thirdtab,text="Estimate# prefix")
 ver.place(x=5,y=40)
 
-lbx = Listbox(thirdtab1, height=1)
-lbx.insert(END, "INV")
-lbx.place(x=100,y=40)
+invset_lbx = Listbox(thirdtab1, height=1)
+invset_lbx.insert(END, "INV")
+invset_lbx.place(x=100,y=40)
 
-ver = Label(thirdtab,text="Starting Invoice number")
-ver.place(x=25,y=80)
+invset_ver = Label(thirdtab,text="Starting Invoice number")
+invset_ver.place(x=25,y=80)
 
-spin1 = Spinbox(thirdtab,from_=1,to=1000000,width=15)
-spin1.place(x=50,y=100)
+invset_spin1 = Spinbox(thirdtab,from_=1,to=1000000,width=15)
+invset_spin1.place(x=50,y=100)
 
-ver = Label(thirdtab,text="Header box background color")
-ver.place(x=5,y=140)
+invset_ver = Label(thirdtab,text="Header box background color")
+invset_ver.place(x=5,y=140)
 
+invset_win_menu1 = StringVar()
+invset_winstyle1 = ttk.Combobox(thirdtab,textvariable=invset_win_menu1)
+invset_winstyle1.place(x=6 ,y=160)
+invset_winstyle1['values'] = ('Default','Black','Maroon','Green','Olive','Navy','Purple','Teal','Gray','Silver','Red','Lime','Yellow','Blue','Fuchsia','Aqua','White','ScrollBar','Background','ActiveCaption','InactiveCaption','Menu','Window','WindowFrame','MenuText','WindowText','CaptionText','ActiveBorder','InactiveBorder','AppWorkSpace','Highlight','HighlightText','BtnFace','InactiveCaptionText','BtnHighlight','3DDkShadow','3DLight','InfoText','InfoBk','Custom')
+invset_winstyle1.current(0)
 
-win_menu = StringVar()
-winstyle = ttk.Combobox(thirdtab,textvariable=win_menu)
-winstyle.place(x=6 ,y=160)
-winstyle['values'] = ('Default','Black','Maroon','Green','Olive','Navy','Purple','Teal','Gray','Silver','Red','Lime','Yellow','Blue','Fuchsia','Aqua','White','ScrollBar','Background','ActiveCaption','InactiveCaption','Menu','Window','WindowFrame','MenuText','WindowText','CaptionText','ActiveBorder','InactiveBorder','AppWorkSpace','Highlight','HighlightText','BtnFace','InactiveCaptionText','BtnHighlight','3DDkShadow','3DLight','InfoText','InfoBk','Custom')
-winstyle.current(0)
-
-ver = Label(thirdtab,text="Customize Invoice text labels")
-ver.place(x=5,y=190)
-
+invset_ver = Label(thirdtab,text="Customize Invoice text labels")
+invset_ver.place(x=5,y=190)
 
 
 
-
-# lbx = Listbox(thirdtab1, height=8, width=25)
-# lbx.insert(END, "Invoice")
-# lbx.insert(END, "Invoice#")
-# lbx.insert(END, "Invoice date")
-# lbx.insert(END, "Due date")
-# lbx.insert(END, "Order ref.#")
-# lbx.insert(END, "Terms")
-# lbx.insert(END, "Invoice to")
-# lbx.insert(END, "Ship to")
-# lbx.insert(END, "ID/SKU")
-# lbx.insert(END, "Product/Service")
-# lbx.insert(END, "Quantity")
-# lbx.insert(END, "Description")
-# lbx.insert(END, "Unit Price")
-# lbx.insert(END, "Price")
-# lbx.insert(END, "Subtotal")
-# lbx.insert(END, "Discount")
-# lbx.insert(END, "Discount rate")
-# lbx.insert(END, "TAX1")
-# lbx.insert(END, "TAX2")
-# lbx.insert(END, "Total Paid")
-# lbx.insert(END, "Balance")
-# lbx.insert(END, "Terms and Conditions")
-# lbx.insert(END, "Tax Exempted")
-# lbx.insert(END, "Page")
-# lbx.insert(END, "of")
-
-
-
-
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Invoice")
-inv_lbx1.place(x=5,y=220)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Invoice#")
-inv_lbx1.place(x=5,y=240)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Invoice date")
-inv_lbx1.place(x=5,y=260)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Order ref.#")
-inv_lbx1.place(x=5,y=280)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Terms")
-inv_lbx1.place(x=5,y=300)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Invoice to")
-inv_lbx1.place(x=5,y=320)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Ship to")
-inv_lbx1.place(x=5,y=220)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "ID/SKU")
-inv_lbx1.place(x=5,y=340)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Product/Service")
-inv_lbx1.place(x=5,y=360)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Quantity")
-inv_lbx1.place(x=5,y=380)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Description")
-inv_lbx1.place(x=5,y=400)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Unit Price")
-inv_lbx1.place(x=5,y=420)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Price")
-inv_lbx1.place(x=5,y=440)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Subtotal")
-inv_lbx1.place(x=5,y=460)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Discount")
-inv_lbx1.place(x=5,y=480)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Discount rate")
-inv_lbx1.place(x=5,y=500)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "TAX1")
-inv_lbx1.place(x=5,y=520)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "TAX2")
-inv_lbx1.place(x=5,y=540)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Total Paid")
-inv_lbx1.place(x=5,y=560)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Balance")
-inv_lbx1.place(x=5,y=580)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Terms and Conditions")
-inv_lbx1.place(x=5,y=600)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Tax Exempted")
-inv_lbx1.place(x=5,y=620)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "Page")
-inv_lbx1.place(x=5,y=640)
-inv_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
-inv_lbx1.insert(END, "of")
-inv_lbx1.place(x=5,y=660)
+invset_lbx1 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx1.insert(END, "Invoice")
+invset_lbx1.place(x=5,y=220)
+invset_lbx2 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx2.insert(END, "Invoice#")
+invset_lbx2.place(x=5,y=240)
+invset_lbx3 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx3.insert(END, "Invoice date")
+invset_lbx3.place(x=5,y=260)
+invset_lbx4 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx4.insert(END, "Order ref.#")
+invset_lbx4.place(x=5,y=280)
+invset_lbx5 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx5.insert(END, "Terms")
+invset_lbx5.place(x=5,y=300)
+invset_lbx6 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx6.insert(END, "Invoice to")
+invset_lbx6.place(x=5,y=320)
+invset_lbx7 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx7.insert(END, "Ship to")
+invset_lbx7.place(x=5,y=220)
+invset_lbx8 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx8.insert(END, "ID/SKU")
+invset_lbx8.place(x=5,y=340)
+invset_lbx9 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx9.insert(END, "Product/Service")
+invset_lbx9.place(x=5,y=360)
+invset_lbx10 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx10.insert(END, "Quantity")
+invset_lbx10.place(x=5,y=380)
+invset_lbx11 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx11.insert(END, "Description")
+invset_lbx11.place(x=5,y=400)
+invset_lbx12 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx12.insert(END, "Unit Price")
+invset_lbx12.place(x=5,y=420)
+invset_lbx13 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx13.insert(END, "Price")
+invset_lbx13.place(x=5,y=440)
+invset_lbx14 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx14.insert(END, "Subtotal")
+invset_lbx14.place(x=5,y=460)
+invset_lbx15 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx15.insert(END, "Discount")
+invset_lbx15.place(x=5,y=480)
+invset_lbx16 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx16.insert(END, "Discount rate")
+invset_lbx16.place(x=5,y=500)
+invset_lbx17 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx17.insert(END, "TAX1")
+invset_lbx17.place(x=5,y=520)
+invset_lbx18 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx18.insert(END, "TAX2")
+invset_lbx18.place(x=5,y=540)
+invset_lbx19 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx19.insert(END, "Total Paid")
+invset_lbx19.place(x=5,y=560)
+invset_lbx20 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx20.insert(END, "Balance")
+invset_lbx20.place(x=5,y=580)
+invset_lbx21 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx21.insert(END, "Terms and Conditions")
+invset_lbx21.place(x=5,y=600)
+invset_lbx22 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx22.insert(END, "Tax Exempted")
+invset_lbx22.place(x=5,y=620)
+invset_lbx23 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx23.insert(END, "Page")
+invset_lbx23.place(x=5,y=640)
+invset_lbx24 = Text(thirdtab1, height=1, width=25, font=('Calibri 10'))
+invset_lbx24.insert(END, "of")
+invset_lbx24.place(x=5,y=660)
 
 
 
-
-s1 = StringVar(thirdtab1, "Invoice")
-# lbx.place(x=5,y=220)
-
-ver = Label(thirdtab,text="Default Invoice template(example,click on preview for mouse scrolling)")
-ver.place(x=248,y=55 )
-
-ver = Label(thirdtab,text="Default Invoice template")
-ver.place(x=619,y=40)
+invset_s1 = StringVar(thirdtab1, "Invoice")
 
 
+invset_ver = Label(thirdtab,text="Default Invoice template(example,click on preview for mouse scrolling)")
+invset_ver.place(x=248,y=55 )
 
-messagelbframe=LabelFrame(thirdtab,text="Predefined terms and conditions text for Invoice", height=100, width=980)
-messagelbframe.place(x=248, y=400)
+invset_ver = Label(thirdtab,text="Default Invoice template")
+invset_ver.place(x=619,y=40)
 
-txt = scrolledtext.ScrolledText(thirdtab, undo=True,width=115,height=4)
-txt.place(x=260,y=425)
+#data=StringVar()
 
-bttermadd = Button(thirdtab,text="Restore defaults")
-bttermadd.place(x=32,y=450)
+invset_messagelbframe=LabelFrame(thirdtab,text="Predefined terms and conditions text for Invoice", height=100, width=980)
+invset_messagelbframe.place(x=248, y=400)
+
+invset_txt = scrolledtext.ScrolledText(thirdtab, undo=True,width=115,height=4)
+invset_txt.place(x=260,y=425)
+
+
+
+invset_bttermadd = Button(thirdtab,text="Restore defaults")
+invset_bttermadd.place(x=32,y=450)
+
+
+
 
 #------------Professional 1 (logo on left side)-------------
-
-def maindropmenu(event):
-    menuvar=win_menu2.get()
+def invset_maindropmenu(event):
+    menuvar=invset_win_menu2.get()
     print(menuvar)
 
     if menuvar == 'Professional 1 (logo on left side)':
-      
-      frame = Frame(thirdtab1, width=953, height=300)
+      #print('hai')
+      frame = Frame(thirdtab, width=953, height=300)
       frame.pack(expand=True, fill=BOTH)
       frame.place(x=247,y=90)
       canvas=Canvas(frame, bg='grey', width=953, height=300, scrollregion=(0,0,700,700))
@@ -427,7 +396,7 @@ def maindropmenu(event):
       canvas.create_rectangle(100, 10, 850, 687 , outline='yellow',fill='white')
       canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(285, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
-
+      
       canvas.create_text(195, 150, text="Invoice#", fill="black", font=('Helvetica 11'))
       canvas.create_text(205, 170, text="Invoicedate", fill="black", font=('Helvetica 11'))
       canvas.create_text(200, 190, text="Due date", fill="black", font=('Helvetica 11'))
@@ -436,8 +405,8 @@ def maindropmenu(event):
       canvas.create_text(350, 150, text="INV1/2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(350, 170, text="03-05-2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(350, 190, text="18-05-2022", fill="black", font=('Helvetica 11'))
-      canvas.create_text(340, 210, text="NET 15", fill="black", font=('Helvetica 11'))      
-
+      canvas.create_text(340, 210, text="NET 15", fill="black", font=('Helvetica 11'))   
+      
       canvas.create_text(720, 80, text="Your Company Name", fill="black", font=('Helvetica 12 '))
       canvas.create_text(750, 110, text="Address line 1", fill="black", font=('Helvetica 10'))
       canvas.create_text(750, 125, text="Address line 2", fill="black", font=('Helvetica 10'))
@@ -447,7 +416,7 @@ def maindropmenu(event):
       canvas.create_text(745, 185, text="Sales tax reg No.", fill="black", font=('Helvetica 10'))
       canvas.create_text(750, 205, text="Invoice", fill="black", font=('Helvetica 14 bold'))
       canvas.create_text(746, 225, text="TAX EXEMPTED", fill="black", font=('Helvetica 10'))
-        
+      
       canvas.create_text(210, 260, text="Invoice to", fill="black", font=('Helvetica 10 underline'))
       canvas.create_text(203, 280, text="John Doe", fill="black", font=('Helvetica 10 '))
       canvas.create_text(246, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
@@ -458,9 +427,8 @@ def maindropmenu(event):
       canvas.create_text(598, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
       canvas.create_text(608, 310, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
       canvas.create_text(568, 325, text="United States", fill="black", font=('Helvetica 10'))
-
       s = ttk.Style()
-      s.configure('Treeview.Heading', background=''+ win_menu.get(),State='DISABLE')
+      s.configure('Treeview.Heading', background=''+ invset_win_menu1.get(),State='DISABLE')
 
       tree=ttk.Treeview(canvas, column=("c1", "c2","c3", "c4", "c5"), show='headings',height= 0, style='mystyle.Treeview')
 
@@ -528,10 +496,9 @@ def maindropmenu(event):
       canvas.create_text(280, 640, text= "", fill="black", font=('Helvetica 10'))
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-
+      print('hai')
 
 #----------------Professional 2 (logo on right side)------------------
-   
     elif menuvar == 'Professional 2 (logo on right side)':
       frame = Frame(thirdtab, width=953, height=300)
       frame.pack(expand=True, fill=BOTH)
@@ -547,9 +514,9 @@ def maindropmenu(event):
       canvas.config(yscrollcommand=vertibar.set)
       canvas.pack(expand=True,side=LEFT,fill=BOTH)
       canvas.create_rectangle(100, 10, 850, 687 , outline='yellow',fill='white')
-      canvas.create_text(500, 50, text="Title text goes here...1", fill="black", font=('Helvetica 10'))
+      canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(650, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
-   
+      
       canvas.create_text(250, 80, text="Your Company Name", fill="black", font=('Helvetica 12 '))
       canvas.create_text(225, 110, text="Address line 1", fill="black", font=('Helvetica 10'))
       canvas.create_text(225, 125, text="Address line 2", fill="black", font=('Helvetica 10'))
@@ -580,8 +547,7 @@ def maindropmenu(event):
       canvas.create_text(598, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
       canvas.create_text(608, 310, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
       canvas.create_text(568, 325, text="United States", fill="black", font=('Helvetica 10'))
-      
-      
+
       tree=ttk.Treeview(canvas, column=("c1", "c2","c3", "c4", "c5"), show='headings',height= 0, style='mystyle.Treeview')
       
       tree.column("# 1", anchor=E, stretch=NO, width=100)
@@ -645,9 +611,9 @@ def maindropmenu(event):
       canvas.create_line(150, 620, 795, 620)
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-   
 
-  #----------------Simplified 1 (logo on left side)------------------ 
+
+#----------------Simplified 1 (logo on left side)------------------ 
     elif menuvar == 'Simplified 1 (logo on left side)':
       print('hello')
       frame = Frame(thirdtab, width=953, height=300)
@@ -753,7 +719,6 @@ def maindropmenu(event):
       canvas.create_line(150, 620, 795, 620)
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-
 
 #----------------Simplified 2 (logo on right side)------------------ 
     elif menuvar == 'Simplified 2 (logo on right side)':
@@ -890,16 +855,8 @@ def maindropmenu(event):
       canvas.create_text(534, 200, text="Phone: 555-5555", fill="black", font=('Helvetica 10'))
       canvas.create_text(534, 215, text="Sales tax reg No.", fill="black", font=('Helvetica 10'))
 
-      canvas.create_text(210, 260, text="Invoice to", fill="black", font=('Helvetica 10 underline'))
-      canvas.create_text(203, 280, text="John Doe", fill="black", font=('Helvetica 10 '))
-      canvas.create_text(246, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
-      canvas.create_text(255, 310, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
-      canvas.create_text(215, 325, text="United States", fill="black", font=('Helvetica 10'))
-      canvas.create_text(550, 260, text="Ship to", fill="black", font=('Helvetica 10 underline'))
-      canvas.create_text(556, 280, text="John Doe", fill="black", font=('Helvetica 10 '))
-      canvas.create_text(598, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
-      canvas.create_text(608, 310, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
-      canvas.create_text(568, 325, text="United States", fill="black", font=('Helvetica 10'))
+      
+      
 
       canvas.create_text(659, 180, text="Invoice", fill="black", font=('Helvetica 11'))
       canvas.create_text(675, 210, text="Invoice date", fill="black", font=('Helvetica 11'))
@@ -908,7 +865,6 @@ def maindropmenu(event):
       canvas.create_text(776, 180, text="INV1/2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(776, 210, text="05 May 2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(776, 240, text="20-05-2022", fill="black", font=('Helvetica 11'))
-      
       tree=ttk.Treeview(canvas, column=("c1", "c2","c3", "c4", "c5"), show='headings',height= 0, style='mystyle.Treeview')
       
       tree.column("# 1", anchor=E, stretch=NO, width=200)
@@ -971,90 +927,102 @@ def maindropmenu(event):
     else:
         pass
 
-win_menu1 = StringVar()
-winstyle1 = ttk.Combobox(thirdtab,textvariable=win_menu1)
-winstyle1.place(x=770 ,y=40, width=220)
-winstyle1.bind("<<ComboboxSelected>>", maindropmenu)
-winstyle1["values"] = ("Professional 1 (logo on left side)","Professional 2 (logo on right side)","Simplified 1 (logo on left side)","Simplified 2 (logo on right side)","Business Classic")
-winstyle1.current(0)
+invset_win_menu2 = StringVar()
+invset_winstyle2 = ttk.Combobox(thirdtab,textvariable=invset_win_menu2)
+invset_winstyle2.place(x=770 ,y=40, width=220)
+invset_winstyle2.bind("<<ComboboxSelected>>", invset_maindropmenu)
+invset_winstyle2["values"] = ("Professional 1 (logo on left side)","Professional 2 (logo on right side)","Simplified 1 (logo on left side)","Simplified 2 (logo on right side)","Business Classic")
+invset_winstyle2.current(0)
 
 
-#--------tab4-------------#
+
+################## tab04 ###################################
 fourthtab1=Frame(tab04, relief=GROOVE, bg="#f8f8f2")
 fourthtab1.pack(side="top", fill=BOTH)
 
 fourthtab=Frame(fourthtab1, bg="#f5f3f2", height=700)
 fourthtab.pack(side="top", fill=BOTH)
+ord_ver = Label(fourthtab,text="Order# prefix")
+ord_ver.place(x=5,y=40)
 
-ver = Label(fourthtab,text="Order# prefix")
-ver.place(x=5,y=40)
+ordset_lbx = Listbox(fourthtab1, height=1)
+ordset_lbx.insert(END, "ORD")
+ordset_lbx.place(x=100,y=40)
 
-lbx = Listbox(fourthtab1, height=1)
-lbx.insert(END, "ORD")
-lbx.place(x=100,y=40)
+ordset_ver = Label(fourthtab,text="Starting estimate number")
+ordset_ver.place(x=25,y=80)
 
-ver = Label(fourthtab,text="Starting Invoice number")
-ver.place(x=25,y=80)
+ordset_spin1 = Spinbox(fourthtab,from_=1,to=1000000,width=15)
+ordset_spin1.place(x=50,y=100)
 
-spin1 = Spinbox(fourthtab,from_=1,to=1000000,width=15)
-spin1.place(x=50,y=100)
+ordset_ver = Label(fourthtab,text="Header box background color")
+ordset_ver.place(x=5,y=140)
 
-ver = Label(fourthtab,text="Header box background color")
-ver.place(x=5,y=140)
+ordset_win_menu1 = StringVar()
+ordset_winstyle1 = ttk.Combobox(fourthtab,textvariable=ordset_win_menu1)
+ordset_winstyle1.place(x=6 ,y=160)
+ordset_winstyle1['values'] = ('Default','Black','Maroon','Green','Olive','Navy','Purple','Teal','Gray','Silver','Red','Lime','Yellow','Blue','Fuchsia','Aqua','White','ScrollBar','Background','ActiveCaption','InactiveCaption','Menu','Window','WindowFrame','MenuText','WindowText','CaptionText','ActiveBorder','InactiveBorder','AppWorkSpace','Highlight','HighlightText','BtnFace','InactiveCaptionText','BtnHighlight','3DDkShadow','3DLight','InfoText','InfoBk','Custom')
+ordset_winstyle1.current(0)
 
-
-win_menu = StringVar()
-winstyle = ttk.Combobox(fourthtab,textvariable=win_menu)
-winstyle.place(x=6 ,y=160)
-winstyle['values'] = ('Default','Black','Maroon','Green','Olive','Navy','Purple','Teal','Gray','Silver','Red','Lime','Yellow','Blue','Fuchsia','Aqua','White','ScrollBar','Background','ActiveCaption','InactiveCaption','Menu','Window','WindowFrame','MenuText','WindowText','CaptionText','ActiveBorder','InactiveBorder','AppWorkSpace','Highlight','HighlightText','BtnFace','InactiveCaptionText','BtnHighlight','3DDkShadow','3DLight','InfoText','InfoBk','Custom')
-winstyle.current(0)
-
-ver = Label(fourthtab,text="Customize Invoice text labels")
-ver.place(x=5,y=190)
-
-lbx = Listbox(fourthtab1, height=8, width=25)
-lbx.insert(END, "Order")
-lbx.insert(END, "Order#")
-lbx.insert(END, "Order date")
-lbx.insert(END, "Due date")
-lbx.insert(END, "Order To")
-lbx.insert(END, "Order total")
+ordset_ver = Label(fourthtab,text="Customize Estimate text labels")
+ordset_ver.place(x=5,y=190)
 
 
 
+ordset_lbx1 = Text(fourthtab1, height=1, width=25, font=('Calibri 10'))
+ordset_lbx1.insert(END, "Order")
+ordset_lbx1.place(x=5,y=220)
+ordset_lbx2 = Text(fourthtab1,height=1, width=25, font=('Calibri 10'))
+ordset_lbx2.insert(END, "Order#")
+ordset_lbx2.place(x=5,y=240)
+ordset_lbx3 = Text(fourthtab1,height=1, width=25, font=('Calibri 10'))
+ordset_lbx3.insert(END, "Order date")
+ordset_lbx3.place(x=5,y=260) 
+ordset_lbx4 = Text(fourthtab1,height=1, width=25, font=('Calibri 10'))
+ordset_lbx4.insert(END, "Due date")
+ordset_lbx4.place(x=5,y=280)
+ordset_lbx5 = Text(fourthtab1,height=1, width=25, font=('Calibri 10'))
+ordset_lbx5.insert(END, "Order to")
+ordset_lbx5.place(x=5,y=300)
+ordset_lbx6 = Text(fourthtab1, height=3,width=25, font=('Calibri 10'))
+ordset_lbx6.insert(END, "Order total")
+ordset_lbx6.place(x=5,y=320)
 
-lbx.place(x=5,y=220)
 
-ver = Label(fourthtab,text="Default Invoice template(example,click on preview for mouse scrolling)")
-ver.place(x=248,y=55 )
 
-ver = Label(fourthtab,text="Default Invoice template")
-ver.place(x=619,y=40)
+ordset_s1 = StringVar(fourthtab1, "Order")
 
-win_menu = StringVar()
-winstyle = ttk.Combobox(fourthtab,textvariable=win_menu)
-# winstyle.place(x=770 ,y=40, width=220)
-# winstyle['values'] = ('Professional 1 (logo on left side)','Professional 2 (logo on right side)','Simplified 1 (logo on left side)','Simplified 2 (logo on right side)','Business Classic')
-# winstyle.current(0)
 
-messagelbframe=LabelFrame(fourthtab,text="Predefined terms and conditions text for estimates", height=100, width=980)
-messagelbframe.place(x=248, y=400)
+ordset_ver = Label(fourthtab,text="Default Order template(example,click on preview for mouse scrolling)")
+ordset_ver.place(x=248,y=55 )
 
-txt = scrolledtext.ScrolledText(fourthtab, undo=True,width=115,height=4)
-txt.place(x=260,y=425)
+ordset_ver = Label(fourthtab,text="Default Order template")
+ordset_ver.place(x=619,y=40)
 
-bttermadd = Button(fourthtab,text="Restore defaults")
-bttermadd.place(x=32,y=450)
 
-#------------Professional 1 (logo on left side)-------------
 
-def maindropmenu(event):
-    menuvar=win_menu2.get()
+ordset_messagelbframe=LabelFrame(fourthtab,text="Predefined terms and conditions text for estimates", height=100, width=980)
+ordset_messagelbframe.place(x=248, y=400)
+
+ordset_txt = scrolledtext.ScrolledText(fourthtab, undo=True,width=115,height=4)
+ordset_txt.place(x=260,y=425)
+
+
+
+ordset_bttermadd = Button(fourthtab,text="Restore defaults")
+ordset_bttermadd.place(x=32,y=450)
+
+
+
+
+# ------------Professional 1 (logo on left side)-------------
+def ordset_maindropmenu(event):
+    menuvar=ordset_win_menu2.get()
     print(menuvar)
 
     if menuvar == 'Professional 1 (logo on left side)':
-      #print('hai')
-      frame = Frame(fourthtab1, width=953, height=300)
+      
+      frame = Frame(fourthtab, width=953, height=300)
       frame.pack(expand=True, fill=BOTH)
       frame.place(x=247,y=90)
       canvas=Canvas(frame, bg='grey', width=953, height=300, scrollregion=(0,0,700,700))
@@ -1069,7 +1037,7 @@ def maindropmenu(event):
       canvas.create_rectangle(100, 10, 850, 687 , outline='yellow',fill='white')
       canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(285, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
-
+      
       canvas.create_text(195, 150, text="Order#", fill="black", font=('Helvetica 11'))
       canvas.create_text(205, 170, text="Order date", fill="black", font=('Helvetica 11'))
       canvas.create_text(200, 190, text="Due date", fill="black", font=('Helvetica 11'))
@@ -1100,9 +1068,8 @@ def maindropmenu(event):
       canvas.create_text(598, 295, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
       canvas.create_text(608, 310, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
       canvas.create_text(568, 325, text="United States", fill="black", font=('Helvetica 10'))
-
       s = ttk.Style()
-      s.configure('Treeview.Heading', background=''+ win_menu2.get(),State='DISABLE')
+      s.configure('Treeview.Heading', background=''+ ordset_win_menu1.get(),State='DISABLE')
 
       tree=ttk.Treeview(canvas, column=("c1", "c2","c3", "c4", "c5"), show='headings',height= 0, style='mystyle.Treeview')
 
@@ -1170,10 +1137,9 @@ def maindropmenu(event):
       canvas.create_text(280, 640, text= "", fill="black", font=('Helvetica 10'))
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-
+      print('hai')
 
 #----------------Professional 2 (logo on right side)------------------
-   
     elif menuvar == 'Professional 2 (logo on right side)':
       frame = Frame(fourthtab, width=953, height=300)
       frame.pack(expand=True, fill=BOTH)
@@ -1189,9 +1155,9 @@ def maindropmenu(event):
       canvas.config(yscrollcommand=vertibar.set)
       canvas.pack(expand=True,side=LEFT,fill=BOTH)
       canvas.create_rectangle(100, 10, 850, 687 , outline='yellow',fill='white')
-      canvas.create_text(500, 50, text="Title text goes here...1", fill="black", font=('Helvetica 10'))
+      canvas.create_text(500, 50, text="Title text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(650, 110, text="Your Company Logo", fill="black", font=('Helvetica 18 bold'))
-   
+      
       canvas.create_text(250, 80, text="Your Company Name", fill="black", font=('Helvetica 12 '))
       canvas.create_text(225, 110, text="Address line 1", fill="black", font=('Helvetica 10'))
       canvas.create_text(225, 125, text="Address line 2", fill="black", font=('Helvetica 10'))
@@ -1286,9 +1252,9 @@ def maindropmenu(event):
       canvas.create_line(150, 620, 795, 620)
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-   
 
-  #----------------Simplified 1 (logo on left side)------------------ 
+
+#----------------Simplified 1 (logo on left side)------------------ 
     elif menuvar == 'Simplified 1 (logo on left side)':
       print('hello')
       frame = Frame(fourthtab, width=953, height=300)
@@ -1530,19 +1496,19 @@ def maindropmenu(event):
       canvas.create_text(534, 200, text="Phone: 555-5555", fill="black", font=('Helvetica 10'))
       canvas.create_text(534, 215, text="Sales tax reg No.", fill="black", font=('Helvetica 10'))
 
-      canvas.create_text(655, 100, text="John Doe", fill="black", font=('Helvetica 10 '))
-      canvas.create_text(696, 120, text="381 South Bedford Road", fill="black", font=('Helvetica 10'))
-      canvas.create_text(706, 135, text="Bedford Corners, NY 10549", fill="black", font=('Helvetica 10'))
-      canvas.create_text(665, 150, text="United States", fill="black", font=('Helvetica 10'))
+      
 
       canvas.create_text(659, 180, text="Order", fill="black", font=('Helvetica 11'))
       canvas.create_text(675, 210, text="Order date", fill="black", font=('Helvetica 11'))
       canvas.create_text(659, 240, text="Due date", fill="black", font=('Helvetica 11'))
 
-      canvas.create_text(776, 180, text="EST1/2022", fill="black", font=('Helvetica 11'))
+      
+
+      
+
+      canvas.create_text(776, 180, text="ORD1/2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(776, 210, text="05 May 2022", fill="black", font=('Helvetica 11'))
       canvas.create_text(776, 240, text="20-05-2022", fill="black", font=('Helvetica 11'))
-      
       tree=ttk.Treeview(canvas, column=("c1", "c2","c3", "c4", "c5"), show='headings',height= 0, style='mystyle.Treeview')
       
       tree.column("# 1", anchor=E, stretch=NO, width=200)
@@ -1602,20 +1568,14 @@ def maindropmenu(event):
       canvas.create_line(150, 620, 795, 620, fill='orange')
       canvas.create_text(280, 655, text="Page footer text goes here...", fill="black", font=('Helvetica 10'))
       canvas.create_text(720, 655, text="Page 1 of 1", fill="black", font=('Helvetica 10'))
-  
- 
-   
-   
     else:
         pass
 
-win_menu2 = StringVar()
-winstyle2 = ttk.Combobox(fourthtab,textvariable=win_menu2)
-winstyle2.place(x=770 ,y=40, width=220)
-winstyle2.bind("<<ComboboxSelected>>", maindropmenu)
-winstyle2["values"] = ("Professional 1 (logo on left side)","Professional 2 (logo on right side)","Simplified 1 (logo on left side)","Simplified 2 (logo on right side)","Business Classic")
-winstyle2.current(0)
+ordset_win_menu2 = StringVar()
+ordset_winstyle2 = ttk.Combobox(fourthtab,textvariable=ordset_win_menu2)
+ordset_winstyle2.place(x=770 ,y=40, width=220)
+ordset_winstyle2.bind("<<ComboboxSelected>>", ordset_maindropmenu)
+ordset_winstyle2["values"] = ("Professional 1 (logo on left side)","Professional 2 (logo on right side)","Simplified 1 (logo on left side)","Simplified 2 (logo on right side)","Business Classic")
+ordset_winstyle2.current(0)
 
-      
- 
 root.mainloop()
