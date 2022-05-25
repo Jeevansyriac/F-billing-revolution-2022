@@ -247,7 +247,7 @@ thirdtab1.pack(side="top", fill=BOTH)
 
 thirdtab=Frame(thirdtab1, bg="#f5f3f2", height=700)
 thirdtab.pack(side="top", fill=BOTH)
-ver = Label(thirdtab,text="Estimate# prefix")
+ver = Label(thirdtab,text="Invoice# prefix")
 ver.place(x=5,y=20)
 
 invset_lbx = Listbox(thirdtab1, height=1)
