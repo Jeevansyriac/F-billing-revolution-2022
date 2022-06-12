@@ -367,7 +367,7 @@ def mainpage():
     fbcursor.execute(sql)
     k = fbcursor.fetchall()
     if not k:
-      if filename == "k":
+      if filename == "":
         print(zzz)
         sql = 'insert into order_settings(Order_prefix,ordset_Headerboxbackgroundcolor,Customizeordertextlabels,Defaultordertemplate,Customizeordertextlabels1,Customizeordertextlabels2,Customizeordertextlabels3,Customizeordertextlabels4,Customizeordertextlabels5,Startingordernumber,Predefinedtextfororder)value(%s,%s,%s,%s,%s, %s,%s,%s,%s,%s,%s)'
         val = (ordset_prefix,ordset_header,ordset_text1,ordset_text2,ordset_text3,ordset_text4,ordset_text5,ordset_text6,ordset_default,ordset_spin1,ordset_predefined)
@@ -379,7 +379,7 @@ def mainpage():
         fbcursor.execute(sql, val)
         fbilldb.commit()
     else:
-      if filename == "k":
+      if filename == "":
         sql = "update company set Order_prefix=%s,ordset_Headerboxbackgroundcolor=%s,Customizeordertextlabels=%s,Defaultordertemplate=%s,Customizeordertextlabels1=%s,Customizeordertextlabels2=%s,Customizeordertextlabels3=%s,Customizeordertextlabels4=%s,Customizeordertextlabels5=%s,Startingordernumber=%s,Predefinedtextfororder=%s"
         val = (ordset_prefix,ordset_header,ordset_text1,ordset_text2,ordset_text3,ordset_text4,ordset_text5,ordset_text6,ordset_default,ordset_spin1,ordset_predefined)
         fbcursor.execute(sql, val)
